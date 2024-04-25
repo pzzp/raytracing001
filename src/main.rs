@@ -1,4 +1,4 @@
-use std::io;
+use std::{io};
 
 use color::Color;
 use ray::Ray;
@@ -11,21 +11,27 @@ mod ray;
 mod vec;
 
 fn ray_color(ray: Ray) -> Color {
-    if hit_sphere(Point3::new(0.0, 0.0, -1.0), 0.5, &ray) {
-        return Color::new(1.0, 0., 0.);
+    let t = hit_sphere(Point3::new(0.0, 0.0, -1.0), 0.5, &ray);
+    if t > 0.0 {
+        let n = (ray.at(t) - Vec3::new(0.0, 0.0, -1.0)).to_unit_vec3();
+        return 0.5 * Color::new(n.x + 1.0, n.y + 1.0, n.z + 1.0);
     }
     let unit_direction = ray.dir.to_unit_vec3();
     let a = (unit_direction.y + 1.0) * 0.5;
     (1.0 - a) * Color::new(1., 1., 1.) + a * Color::new(0.5, 0.7, 1.0)
 }
 
-fn hit_sphere(center: Point3, radius: f64, ray: &Ray) -> bool {
+fn hit_sphere(center: Point3, radius: f64, ray: &Ray) -> f64 {
     let oc = center -ray.orig;
     let a = dot(ray.dir, ray.dir);
     let b = dot(-2.0 * ray.dir, oc);
     let c = dot(oc, oc) - radius *radius;
     let discriminant = b * b - 4.0 * a * c;
-    discriminant >= 0.0
+    if discriminant < 0.0 {
+        -1.0
+    } else {
+        (-b - f64::sqrt(discriminant)) / (2.0 * a)
+    }
 }
 
 fn main() {
