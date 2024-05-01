@@ -24,13 +24,13 @@ fn ray_color(ray: Ray) -> Color {
 fn hit_sphere(center: Point3, radius: f64, ray: &Ray) -> f64 {
     let oc = center -ray.orig;
     let a = dot(ray.dir, ray.dir);
-    let b = dot(-2.0 * ray.dir, oc);
-    let c = dot(oc, oc) - radius *radius;
-    let discriminant = b * b - 4.0 * a * c;
+    let h = dot(ray.dir, oc);
+    let c = oc.length_squared() - radius * radius;
+    let discriminant = h * h - a * c;
     if discriminant < 0.0 {
         -1.0
     } else {
-        (-b - f64::sqrt(discriminant)) / (2.0 * a)
+        (h - f64::sqrt(discriminant)) / a
     }
 }
 
