@@ -8,9 +8,7 @@ pub struct HitableList {
 
 impl HitableList {
     pub fn new_empty() -> Self {
-        HitableList {
-            objects: vec![],
-        }
+        HitableList { objects: vec![] }
     }
 
     pub fn clear(&mut self) {

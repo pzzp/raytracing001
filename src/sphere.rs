@@ -1,6 +1,6 @@
+use crate::hitable::{HitRecored, Hitable};
 use crate::ray::Ray;
 use crate::vec::{dot, Point3};
-use crate::hitable::{HitRecored, Hitable};
 
 #[derive(Clone, Copy, PartialEq, PartialOrd, Debug)]
 pub struct Sphere {
@@ -8,12 +8,12 @@ pub struct Sphere {
     pub radius: f64,
 }
 
-impl Hitable for Sphere{
+impl Hitable for Sphere {
     fn hit(&self, r: &Ray, ray_tmin: f64, ray_tmax: f64) -> Option<HitRecored> {
         let oc = self.center - r.orig;
         let a = r.dir.length_squared();
         let h = dot(r.dir, oc);
-        let c =  oc.length_squared() - self.radius * self.radius;
+        let c = oc.length_squared() - self.radius * self.radius;
         let discriminant = h * h - a * c;
         if discriminant < 0.0 {
             return None;

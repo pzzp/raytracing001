@@ -66,12 +66,11 @@ impl Mul<f64> for Vec3 {
 
 impl Mul<Vec3> for f64 {
     type Output = Vec3;
-    
+
     fn mul(self, rhs: Vec3) -> Self::Output {
         rhs * self
     }
 }
-
 
 impl Div<f64> for Vec3 {
     type Output = Self;

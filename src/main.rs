@@ -1,18 +1,18 @@
 use std::{f64::INFINITY, io, rc::Rc};
 
 use color::Color;
+use hitable_list::HitableList;
 use ray::Ray;
 use vec::{dot, Point3};
-use hitable_list::HitableList;
 
 use crate::{color::write_color, hitable::Hitable, sphere::Sphere, vec::Vec3};
 
 mod color;
-mod ray;
-mod vec;
 mod hitable;
 mod hitable_list;
+mod ray;
 mod sphere;
+mod vec;
 
 fn ray_color(r: &Ray, world: &dyn Hitable) -> Color {
     if let Some(rec) = world.hit(r, 0., INFINITY) {
@@ -42,8 +42,14 @@ fn main() {
     // Wold
 
     let mut world = HitableList::new_empty();
-    world.add(Rc::new(Sphere {center:Point3::new(0., 0., -1.), radius: 0.5}));
-    world.add(Rc::new(Sphere {center:Point3::new(0., -100.5, -1.), radius: 100.}));
+    world.add(Rc::new(Sphere {
+        center: Point3::new(0., 0., -1.),
+        radius: 0.5,
+    }));
+    world.add(Rc::new(Sphere {
+        center: Point3::new(0., -100.5, -1.),
+        radius: 100.,
+    }));
 
     // Camera
 
@@ -61,7 +67,8 @@ fn main() {
     let pixel_delta_v = viewport_v / image_height as f64;
 
     // Calculate the location of the upper left pixel.
-    let viewport_upper_left = camera_center - Vec3::new(0., 0., focal_length) - viewport_u / 2. - viewport_v / 2.;
+    let viewport_upper_left =
+        camera_center - Vec3::new(0., 0., focal_length) - viewport_u / 2. - viewport_v / 2.;
     let pixel100_loc = viewport_upper_left + (pixel_delta_u + pixel_delta_v) * 0.5;
 
     // Render
