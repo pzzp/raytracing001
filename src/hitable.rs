@@ -1,3 +1,4 @@
+use crate::interval::{self, Interval};
 use crate::ray::Ray;
 use crate::vec::{dot, Point3, Vec3};
 
@@ -27,5 +28,5 @@ impl HitRecored {
 }
 
 pub trait Hitable {
-    fn hit(&self, r: &Ray, ray_tmin: f64, ray_tmax: f64) -> Option<HitRecored>;
+    fn hit(&self, r: &Ray, ray_t: &Interval) -> Option<HitRecored>;
 }

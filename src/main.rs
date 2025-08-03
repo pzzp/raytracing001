@@ -5,17 +5,18 @@ use hitable_list::HitableList;
 use ray::Ray;
 use vec::{dot, Point3};
 
-use crate::{color::write_color, hitable::Hitable, sphere::Sphere, vec::Vec3};
+use crate::{color::write_color, hitable::Hitable, interval::Interval, sphere::Sphere, vec::Vec3};
 
 mod color;
 mod hitable;
 mod hitable_list;
+mod interval;
 mod ray;
 mod sphere;
 mod vec;
 
 fn ray_color(r: &Ray, world: &dyn Hitable) -> Color {
-    if let Some(rec) = world.hit(r, 0., INFINITY) {
+    if let Some(rec) = world.hit(r, &Interval::new(0., INFINITY)) {
         0.5 * (rec.normal + Color::new(1., 1., 1.))
     } else {
         let unit_direction = r.dir.to_unit_vec3();

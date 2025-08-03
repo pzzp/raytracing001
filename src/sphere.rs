@@ -1,4 +1,5 @@
 use crate::hitable::{HitRecored, Hitable};
+use crate::interval::Interval;
 use crate::ray::Ray;
 use crate::vec::{dot, Point3};
 
@@ -9,7 +10,7 @@ pub struct Sphere {
 }
 
 impl Hitable for Sphere {
-    fn hit(&self, r: &Ray, ray_tmin: f64, ray_tmax: f64) -> Option<HitRecored> {
+    fn hit(&self, r: &Ray, ray_t: &Interval) -> Option<HitRecored> {
         let oc = self.center - r.orig;
         let a = r.dir.length_squared();
         let h = dot(r.dir, oc);
@@ -20,9 +21,9 @@ impl Hitable for Sphere {
         }
         let sqrtd = discriminant.sqrt();
         let mut root = (h - sqrtd) / a;
-        if root <= ray_tmin || root >= ray_tmax {
+        if !ray_t.surrounds(root) {
             root = (h + sqrtd) / a;
-            if root <= ray_tmin || root >= ray_tmax {
+            if !ray_t.surrounds(root) {
                 return None;
             }
         }

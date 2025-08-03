@@ -1,6 +1,10 @@
 use std::rc::Rc;
 
-use crate::hitable::{HitRecored, Hitable};
+use crate::{
+    hitable::{HitRecored, Hitable},
+    interval::Interval,
+    ray::Ray,
+};
 
 pub struct HitableList {
     objects: Vec<Rc<dyn Hitable>>,
@@ -21,11 +25,11 @@ impl HitableList {
 }
 
 impl Hitable for HitableList {
-    fn hit(&self, r: &crate::ray::Ray, ray_tmin: f64, ray_tmax: f64) -> Option<HitRecored> {
+    fn hit(&self, r: &Ray, ray_t: &Interval) -> Option<HitRecored> {
         let mut result = Option::<HitRecored>::None;
-        let mut closet_so_far = ray_tmax;
+        let mut closet_so_far = ray_t.max;
         for object in &self.objects {
-            if let Some(rec) = object.hit(r, ray_tmin, closet_so_far) {
+            if let Some(rec) = object.hit(r, &Interval::new(ray_t.min, closet_so_far)) {
                 result = Some(rec);
                 closet_so_far = rec.t;
             }
